@@ -8,14 +8,12 @@ module.exports = (grunt) ->
         src: 'public/assets/*.*'
 
 
-    snocketsify:
+    browserify:
+      options:
+        transform: ['coffeeify']
       app:
         src: 'app/client/app.coffee'
         dest: 'public/assets/app.js'
-
-      dependencies:
-        src: 'app/client/dependencies.coffee'
-        dest: 'public/assets/dependencies.js'
 
 
     stylus:
@@ -54,10 +52,6 @@ module.exports = (grunt) ->
         src: 'public/assets/app.js'
         dest: 'public/assets/app.min.js'
 
-      dependencies:
-        src: 'public/assets/dependencies.js'
-        dest: 'public/assets/dependencies.min.js'
-
       views:
         src: 'public/assets/views.js'
         dest: 'public/assets/views.min.js'
@@ -72,11 +66,6 @@ module.exports = (grunt) ->
         src: 'public/assets/app.min.js'
         dest: 'app.min.{{hash}}.js'
         key: 'app.js'
-
-      dependencies_js:
-        src: 'public/assets/dependencies.min.js'
-        dest: 'dependencies.min.{{hash}}.js'
-        key: 'dependencies.js'
 
       views_js:
         src: 'public/assets/views.min.js'
@@ -126,18 +115,10 @@ module.exports = (grunt) ->
           'app/shared/**/*.js'
           '!app/shared/**/*.coffee'
 
-          '!app/client/dependencies.coffee'
-        ]
-        tasks: ['snocketsify:app']
-
-      dependencies_js:
-        files: [
-          'app/client/dependencies.coffee'
-
           'vendor/**/*.js'
           'vendor/**/*.coffee'
         ]
-        tasks: ['snocketsify:dependencies']
+        tasks: ['browserify']
 
       css:
         files: [
@@ -166,7 +147,7 @@ module.exports = (grunt) ->
 
 
   grunt.loadNpmTasks('grunt-contrib-clean')
-  grunt.loadNpmTasks('grunt-snocketsify')
+  grunt.loadNpmTasks('grunt-browserify')
   grunt.loadNpmTasks('grunt-contrib-stylus')
   grunt.loadNpmTasks('grunt-contrib-jade')
   grunt.loadNpmTasks('grunt-contrib-cssmin')
