@@ -29,6 +29,7 @@ html.no-js(lang="en-US")
 
     include blocks/analytics
 
-    script(src=getAsset('dependencies.js'))
-    script(src=getAsset('views.js'))
-    script(src=getAsset('app.js'))
+    if env === 'development'
+      script(data-main="/assets/.tmp/app/main", src="/assets/.tmp/vendor/bower/requirejs/require.js")
+    else
+      script(src=getAsset('app.js'))

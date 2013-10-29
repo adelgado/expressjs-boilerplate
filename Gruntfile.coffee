@@ -5,17 +5,19 @@ module.exports = (grunt) ->
 
     clean:
       build:
-        src: 'public/assets/*.*'
+        src: [
+          'public/assets/*.*'
+          'public/assets/.tmp'
+        ]
 
 
-    snocketsify:
-      app:
-        src: 'app/client/app.coffee'
-        dest: 'public/assets/app.js'
-
-      dependencies:
-        src: 'app/client/dependencies.coffee'
-        dest: 'public/assets/dependencies.js'
+    coffee:
+      compile:
+        expand: true
+        cwd: 'app/client/'
+        src: '**/*.coffee'
+        dest: 'public/assets/.tmp/app'
+        ext: '.js'
 
 
     stylus:
@@ -38,9 +40,43 @@ module.exports = (grunt) ->
           compileDebug: false
           client: true
           namespace: 'app.templates'
+          amd: true
           processName: (file)-> file.replace(/views\/client\/([\w\/]+).jade/gi, '$1').replace('/', '_')
         src: 'views/client/**/*.jade'
         dest: 'public/assets/views.js'
+
+
+    copy:
+      vendor:
+        src: 'vendor/**'
+        dest: 'public/assets/.tmp/'
+      shared:
+        cwd: 'app/shared/'
+        expand: true
+        src: '**/*.js'
+        dest: 'public/assets/.tmp/shared/'
+
+
+    # Inspirational reading: https://github.com/jrburke/r.js/blob/master/build/example.build.js
+    requirejs:
+      compile:
+        options:
+          baseUrl: 'public/assets/.tmp/app'
+          mainConfigFile: 'public/assets/.tmp/app/config.js'
+
+          include: ["main"]
+          insertRequire: ["main"]
+          findNestedDependencies: true
+          name: "almond"
+
+          wrap: true
+
+          out: 'public/assets/app.js'
+          optimize: 'none'
+
+          generateSourceMaps: false
+          preserveLicenseComments: true
+          waitSeconds: 0
 
 
     cssmin:
@@ -54,15 +90,6 @@ module.exports = (grunt) ->
         src: 'public/assets/app.js'
         dest: 'public/assets/app.min.js'
 
-      dependencies:
-        src: 'public/assets/dependencies.js'
-        dest: 'public/assets/dependencies.min.js'
-
-      views:
-        src: 'public/assets/views.js'
-        dest: 'public/assets/views.min.js'
-
-
     hashify:
       options:
         basedir: 'public/assets/'
@@ -72,16 +99,6 @@ module.exports = (grunt) ->
         src: 'public/assets/app.min.js'
         dest: 'app.min.{{hash}}.js'
         key: 'app.js'
-
-      dependencies_js:
-        src: 'public/assets/dependencies.min.js'
-        dest: 'dependencies.min.{{hash}}.js'
-        key: 'dependencies.js'
-
-      views_js:
-        src: 'public/assets/views.min.js'
-        dest: 'views.min.{{hash}}.js'
-        key: 'views.js'
 
       app_css:
         src: 'public/assets/app.min.css'
@@ -120,26 +137,24 @@ module.exports = (grunt) ->
 
       app_js:
         files: [
-          'app/client/**/*.js'
           'app/client/**/*.coffee'
-
-          'app/shared/**/*.js'
-          '!app/shared/**/*.coffee'
-
-          '!app/client/dependencies.coffee'
         ]
-        tasks: ['snocketsify:app']
+        tasks: ['coffee']
 
-      dependencies_js:
+      vendor_js:
         files: [
-          'app/client/dependencies.coffee'
-
           'vendor/**/*.js'
           'vendor/**/*.coffee'
         ]
-        tasks: ['snocketsify:dependencies']
+        tasks: ['copy:vendor']
 
-      css:
+      shared_js:
+        files: [
+          'app/shared/**/*.js'
+        ]
+        tasks: ['copy:shared']
+
+      app_css:
         files: [
           'css/**/*.css'
           'css/**/*.styl'
@@ -166,9 +181,11 @@ module.exports = (grunt) ->
 
 
   grunt.loadNpmTasks('grunt-contrib-clean')
-  grunt.loadNpmTasks('grunt-snocketsify')
+  grunt.loadNpmTasks('grunt-contrib-coffee')
   grunt.loadNpmTasks('grunt-contrib-stylus')
   grunt.loadNpmTasks('grunt-contrib-jade')
+  grunt.loadNpmTasks('grunt-contrib-copy')
+  grunt.loadNpmTasks('grunt-contrib-requirejs')
   grunt.loadNpmTasks('grunt-contrib-cssmin')
   grunt.loadNpmTasks('grunt-contrib-uglify')
   grunt.loadNpmTasks('grunt-hashify')
@@ -179,14 +196,17 @@ module.exports = (grunt) ->
   grunt.registerTask('default', [
     'clean'
 
-    'snocketsify'
+    'coffee'
     'stylus'
     'jade'
+
+    'copy'
   ])
 
   grunt.registerTask('build', [
     'default'
 
+    'requirejs'
     'cssmin'
     'uglify'
 
