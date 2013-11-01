@@ -35,8 +35,8 @@
 
     "grunt":                                      "~0.4.1",
     "grunt-contrib-clean":                        "~0.5.0",
-    "coffeeify":                                  ">=0.5.2",
-    "grunt-browserify":                           ">=1.2.9",
+    "coffeeify":                                  "~0.5.2",
+    "grunt-browserify":                           "~1.2.10",
     "grunt-contrib-stylus":                       "~0.9.0",
     "grunt-contrib-jade":                         "~0.8.0",
     "grunt-contrib-cssmin":                       "~0.6.2",
