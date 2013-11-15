@@ -11,6 +11,7 @@ require ['config'], ->
     ], ($, jade, helpers, templates) ->
 
       jade.helpers = helpers
+      jade.client_env = app.env
 
       $('html').removeClass('no-js').addClass('js')
       $('body').append(templates.sample_template())
