@@ -5,10 +5,7 @@ module.exports = (grunt) ->
 
     clean:
       build:
-        src: [
-          'public/assets/*.*'
-          'public/assets/.tmp'
-        ]
+        src: 'public/assets'
 
 
     coffee:
