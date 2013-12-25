@@ -65,6 +65,8 @@ module.exports = (grunt) ->
           insertRequire: ["main"]
           findNestedDependencies: true
           name: "almond"
+          keepBuildDir: true
+          normalizeDirDefines: 'all'
 
           wrap: true
 
