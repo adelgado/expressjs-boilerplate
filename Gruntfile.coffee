@@ -9,11 +9,17 @@ module.exports = (grunt) ->
 
 
     coffee:
-      compile:
+      app:
         expand: true
         cwd: 'app/client/'
         src: '**/*.coffee'
         dest: 'public/assets/.tmp/app'
+        ext: '.js'
+      shared:
+        expand: true
+        cwd: 'app/shared/'
+        src: '**/*.coffee'
+        dest: 'public/assets/.tmp/shared/'
         ext: '.js'
 
 
@@ -47,11 +53,6 @@ module.exports = (grunt) ->
       vendor:
         src: 'vendor/**'
         dest: 'public/assets/.tmp/'
-      shared:
-        cwd: 'app/shared/'
-        expand: true
-        src: '**/*.js'
-        dest: 'public/assets/.tmp/shared/'
 
 
     # Inspirational reading: https://github.com/jrburke/r.js/blob/master/build/example.build.js
@@ -138,26 +139,24 @@ module.exports = (grunt) ->
         files: [
           'app/client/**/*.coffee'
         ]
-        tasks: ['coffee']
+        tasks: ['coffee:app']
 
       vendor_js:
         files: [
           'vendor/**/*.js'
           'vendor/**/*.coffee'
         ]
-        tasks: ['copy:vendor']
+        tasks: ['copy']
 
       shared_js:
         files: [
-          'app/shared/**/*.js'
+          'app/shared/**/*.coffee'
         ]
-        tasks: ['copy:shared']
+        tasks: ['coffee:shared']
 
       app_css:
         files: [
-          'css/**/*.css'
           'css/**/*.styl'
-
           'vendor/**/*.css'
           'vendor/**/*.styl'
         ]
