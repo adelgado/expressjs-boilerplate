@@ -11,6 +11,19 @@ module.exports = (grunt) ->
     browserify:
       options:
         transform: ['coffeeify']
+        alias: [
+          'vendor/bower/jade/runtime.js:jade'
+        ]
+        shim:
+          jquery:
+            path: 'vendor/bower/jquery/jquery'
+            exports: '$'
+          # underscore:
+          #   path: 'vendor/bower/lodash/dist/lodash.underscore'
+          #   exports: '_'
+          # backbone:
+          #   path: 'vendor/bower/backbone/backbone'
+          #   exports: 'Backbone'
       app:
         src: 'app/client/app.coffee'
         dest: 'public/assets/app.js'
@@ -109,12 +122,8 @@ module.exports = (grunt) ->
 
       app_js:
         files: [
-          'app/client/**/*.js'
           'app/client/**/*.coffee'
-
-          'app/shared/**/*.js'
-          '!app/shared/**/*.coffee'
-
+          'app/shared/**/*.coffee'
           'vendor/**/*.js'
           'vendor/**/*.coffee'
         ]
@@ -122,9 +131,7 @@ module.exports = (grunt) ->
 
       css:
         files: [
-          'css/**/*.css'
           'css/**/*.styl'
-
           'vendor/**/*.css'
           'vendor/**/*.styl'
         ]
