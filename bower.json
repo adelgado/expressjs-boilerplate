@@ -2,10 +2,10 @@
   "name": "express-boilerplate-chaplin",
   "private": true,
   "dependencies": {
-    "jade":                          "~1.0.1",
+    "jade":                          "1.0.1",
 
-    "requirejs":                     "~2.1.9",
-    "almond":                        "~0.2.7",
+    "requirejs":                     "2.1.9",
+    "almond":                        "0.2.7",
 
     "jquery":                        "~2.0.3",
 
