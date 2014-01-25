@@ -1,4 +1,3 @@
-- jade.helpers = helpers; jade.client_env = client_env;
 doctype html
 html(lang="en-US")
   head
@@ -16,18 +15,8 @@ html(lang="en-US")
     //- meta(name="format-detection", content="telephone=no")
     //- meta(http-equiv="cleartype", content="on")
 
-    link(rel="stylesheet", href=getAsset('app.css'))
+    link(rel="stylesheet", href="/static.css?v=1")
 
   body
-    block content
-      h1 It works
-
-    script.
-      var app = {
-        env: !{JSON.stringify(client_env)}
-      };
-
-    include blocks/analytics
-
-    script(src=getAsset('views.js'))
-    script(src=getAsset('app.js'))
+    .p-static
+      block content
