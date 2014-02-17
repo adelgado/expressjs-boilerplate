@@ -57,16 +57,10 @@
 
   # Use when outputting string from untrusted source directly to the DOM, especially as JSON
   exports.sanitizeString = (string) ->
-    string = string.replace(/\r\n/g, '\n')
-    string = string.replace(/<\/script>/g, '<\\/script>')
-    unescape(encodeURIComponent(string))
-
-  exports.getClientEnv = (prop)->
-    if client_env?
-      client_env[prop]
-    else if app?
-      app.env[prop]
-    else
-      null
+    string
+      .replace(/\r\n/g, '\n')
+      .replace(/<\/script>/g, '<\\/script>')
+      .replace(/\u2028/g, '\\u2028')
+      .replace(/\u2029/g, '\\u2029')
 
 )(if typeof exports is 'undefined' then this['helpers'] = {} else exports)
