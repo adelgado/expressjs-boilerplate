@@ -18,7 +18,7 @@ module.exports = (grunt) ->
         ]
         shim:
           jquery:
-            path: 'vendor/bower/jquery/jquery'
+            path: 'vendor/bower/jquery/dist/jquery'
             exports: '$'
           # underscore:
           #   path: 'vendor/bower/lodash/dist/lodash.underscore'
